@@ -1,4 +1,4 @@
-name: CI
+name: Master Branch Workflow
 
 on:
   push:
@@ -11,25 +11,27 @@ on:
 env:
   DOCKER_REGISTRY: dock-reg.company.com
   DOCKER_REPO: turtle-team/app
-  BUILD_IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      
+
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
       with:
         fetch-depth: 1
 
     - name: Build Image # run on both master branch changes and pull requests against master
       run: |
-        echo "building image => $DOCKER_REGISTRY/$DOCKER_REPO:$BUILD_IMAGE_TAG"
+        echo "building image => $DOCKER_REGISTRY/$DOCKER_REPO:$GITHUB_SHA"
 
     - name: Tag and Publish # only run master branch changes
       if: github.event_name == 'push'
       run: |
         VERSION=$(cat VERSION)
-        echo "tagging image => $DOCKER_REGISTRY/$DOCKER_REPO:$BUILD_IMAGE_TAG to $DOCKER_REGISTRY/$DOCKER_REPO:$VERSION"
+        git tag $VERSION
+        git push --tags
+        echo "tagging image => $DOCKER_REGISTRY/$DOCKER_REPO:$GITHUB_SHA to $DOCKER_REGISTRY/$DOCKER_REPO:$VERSION"
+        
