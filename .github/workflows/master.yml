@@ -27,10 +27,17 @@ jobs:
       run: |
         echo "building image => $DOCKER_REGISTRY/$DOCKER_REPO:$GITHUB_SHA"
 
+    - name: Set VERSION Environment Variable
+      run: |
+        VERSION=v$(cat VERSION)
+        echo "::set-env name=VERSION::$VERSION"
+
+    - name: Print VERSION
+      run: echo $VERSION
+
     - name: Tag and Publish # only run master branch changes
       if: github.event_name == 'push'
       run: |
-        VERSION=$(cat VERSION)
         git tag $VERSION
         git push --tags
         echo "tagging image => $DOCKER_REGISTRY/$DOCKER_REPO:$GITHUB_SHA to $DOCKER_REGISTRY/$DOCKER_REPO:$VERSION"
