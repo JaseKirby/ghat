@@ -29,7 +29,6 @@ jobs:
 
     - name: Tag and Publish # only run master branch changes
       if: github.event_name == 'push'
-      uses: actions/checkout@v2
       run: |
         VERSION=$(cat VERSION)
         git tag $VERSION
