@@ -3,17 +3,33 @@ name: CI
 on:
   push:
     branches:
-      - master
+    - master
+  pull_request:
+    branches:
+    - master
+
+env:
+  DOCKER_REGISTRY: dock-reg.company.com
+  DOCKER_REPO: turtle-team/app
+  BUILD_IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   build:
-
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
+      
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+
+    - name: Build Image # run on both master branch changes and pull requests against master
       run: |
-        cat VERSION
+        echo "building image => $DOCKER_REGISTRY/$DOCKER_REPO:$BUILD_IMAGE_TAG"
+
+    - name: Tag and Publish # only run master branch changes
+      if: github.event_name == 'push'
+      run: |
+        VERSION=$(cat VERSION)
+        echo "tagging image => $DOCKER_REGISTRY/$DOCKER_REPO:$BUILD_IMAGE_TAG to $DOCKER_REGISTRY/$DOCKER_REPO:$VERSION"
