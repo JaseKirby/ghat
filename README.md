@@ -7,4 +7,4 @@ Test Github Actions
 test of pushing existing tag
 
 - feature-docker
-
+- fix-asset-type
