@@ -37,7 +37,7 @@ jobs:
         echo "::set-output name=version::$VERSION"
 
     - name: run in image
-      uses: docker://${{ env.DOCKER_IMAGE_SHA }}
+      uses: docker://docker.pkg.github.com/jasekirby/ghat/ghat:${{ github.sha }}
       with:
         entrypoint: cat
         args: docker.txt
