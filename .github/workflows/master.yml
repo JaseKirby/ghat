@@ -10,6 +10,9 @@ on:
 
 env:
   DOCKER_REGISTRY: docker.pkg.github.com
+  DOCKER_IMAGE: docker.pkg.github.com/jasekirby/ghat/ghat
+  DOCKER_IMAGE_LATEST: docker.pkg.github.com/jasekirby/ghat/ghat:latest
+  DOCKER_IMAGE_SHA: docker.pkg.github.com/jasekirby/ghat/ghat:${{ github.sha }}
 
 jobs:
   build:
@@ -24,14 +27,7 @@ jobs:
 
     - name: build docker image
       run: |
-        LOWER_GH_REPO=$(echo "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')
-        DOCKER_IMAGE=$DOCKER_REGISTRY/$LOWER_GH_REPO/ghat
-        DOCKER_IMAGE_SHA=$DOCKER_IMAGE:$GITHUB_SHA
         docker build -t $DOCKER_IMAGE_SHA .
-        echo "::set-env name=DOCKER_IMAGE::$DOCKER_IMAGE"
-        echo "::set-output name=docker_image::$DOCKER_IMAGE"
-        echo "::set-env name=DOCKER_IMAGE_SHA::$DOCKER_IMAGE_SHA"
-        echo "::set-output name=docker_image_sha::$DOCKER_IMAGE_SHA"
 
     - name: set version
       id: set_version
@@ -71,13 +67,5 @@ jobs:
         DOCKER_IMAGE_VERSION=$DOCKER_IMAGE:$VERSION
         docker tag $DOCKER_IMAGE_SHA $DOCKER_IMAGE_VERSION
         docker push $DOCKER_IMAGE_VERSION
-
-
-
-    # - name: Tag and Publish # only run master branch changes
-    #   if: github.event_name == 'push'
-    #   run: |
-    #     git tag $VERSION
-    #     git push --tags
-    #     echo "tagging image => $DOCKER_REGISTRY/$DOCKER_REPO:$GITHUB_SHA to $DOCKER_REGISTRY/$DOCKER_REPO:$VERSION"
-        
+        docker tag $DOCKER_IMAGE_SHA $DOCKER_IMAGE_LATEST
+        docker push $DOCKER_IMAGE_LATEST
