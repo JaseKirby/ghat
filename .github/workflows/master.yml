@@ -60,7 +60,7 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: VERSION
         asset_name: VERSION
-        # asset_content_type: application/zip
+        asset_content_type: text/plain
 
     - name: tag and publish docker image
       if: github.event_name == 'push'
