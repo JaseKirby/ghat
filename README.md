@@ -26,3 +26,7 @@ run: |
   echo "::set-env name=DOCKER_IMAGE_SHA::$DOCKER_IMAGE_SHA"
   echo "::set-output name=docker_image_sha::$DOCKER_IMAGE_SHA"
 ```
+
+https://github.community/t5/GitHub-Actions/Use-docker-images-from-GitHub-Package-Registry/td-p/30407
+
+https://github.community/t5/GitHub-Actions/Github-Actions-Docker-login/td-p/29852
