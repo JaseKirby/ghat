@@ -10,6 +10,7 @@ on:
 
 env:
   DOCKER_REGISTRY: docker.pkg.github.com
+  DOCKER_USER: JaseKirby
 
 jobs:
   build:
@@ -29,7 +30,7 @@ jobs:
         LOWER_GH_REPO=$(echo "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')
         DOCKER_IMAGE=$DOCKER_REGISTRY/$LOWER_GH_REPO:$GITHUB_SHA
         docker build -t $DOCKER_IMAGE .
-        docker login -p $GITHUB_TOKEN $DOCKER_REGISTRY
+        docker login -u $DOCKER_USER -p $GITHUB_TOKEN $DOCKER_REGISTRY
         docker push $DOCKER_IMAGE
         echo "::set-env name=DOCKER_IMAGE::$DOCKER_IMAGE"
         echo "::set-output name=docker_image::$DOCKER_IMAGE"
