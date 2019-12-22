@@ -10,9 +10,9 @@ on:
 
 env:
   DOCKER_REGISTRY: docker.pkg.github.com
-  DOCKER_IMAGE: ${{ env.DOCKER_REGISTRY }}/jasekirby/ghat/ghat
-  DOCKER_IMAGE_LATEST: ${{ env.DOCKER_IMAGE }}:latest
-  DOCKER_IMAGE_SHA: ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+  DOCKER_IMAGE: docker.pkg.github.com/jasekirby/ghat/ghat
+  DOCKER_IMAGE_LATEST: docker.pkg.github.com/jasekirby/ghat/ghat:latest
+  DOCKER_IMAGE_SHA: docker.pkg.github.com/jasekirby/ghat/ghat:${{ github.sha }}
 
 jobs:
   build:
