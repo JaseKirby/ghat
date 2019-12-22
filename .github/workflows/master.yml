@@ -36,6 +36,12 @@ jobs:
         echo "::set-env name=VERSION::$VERSION"
         echo "::set-output name=version::$VERSION"
 
+    - name: run in image
+      uses: docker://${{ env.DOCKER_IMAGE_SHA }}
+      with:
+        entrypoint: cat
+        args: docker.txt
+
     - name: create release
       id: create_release
       if: github.event_name == 'push'
@@ -75,8 +81,7 @@ jobs:
   #   needs: build
   #   runs-on: ubuntu-latest
   #   container:
-  #     image: ${{ jobs.build.steps.}}
+  #     image: ${{ env.DOCKER_IMAGE_SHA }}
   #   steps:
-
   #   - name: view README
   #     if: github.event_name == 'push'
