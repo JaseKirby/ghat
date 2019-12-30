@@ -36,6 +36,29 @@ jobs:
         echo "::set-env name=VERSION::$VERSION"
         echo "::set-output name=version::$VERSION"
 
+    - name: add workspace bin to path
+      run: |
+        mkdir -p $GITHUB_WORKSPACE/bin
+        echo "::add-path::$GITHUB_WORKSPACE/bin"
+        echo "::add-path::$RUNNER_WORKSPACE/$(basename $GITHUB_REPOSITORY)/bin"
+
+    - name: establish cache for binary dependencies
+      uses: actions/cache@v1
+      id: cache_bins
+      with:
+        path: ${{ github.workspace }}/bin
+        key: ${{ runner.os }}-bin-${{ hashFiles('deps.sh') }}
+
+    - name: gather dependencies
+      if: steps.cache_bins.outputs.cache-hit != 'true'
+      run: ./deps.sh
+
+    - name: print tool versions
+      run: |
+        terraform -version
+        terragrunt -v
+        kops version
+
     - name: create release
       id: create_release
       if: github.event_name == 'push'

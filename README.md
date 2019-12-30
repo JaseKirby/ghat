@@ -10,6 +10,10 @@ test of pushing existing tag
 - fix-asset-type
 - feature-imgjob
 
+testing caching of things
+
+second test for caching of things after using action outputs
+
 # Notes
 
 beginning docker image build where image repo is deduced by lowercasing standard env variables
